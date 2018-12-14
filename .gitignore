@@ -1,0 +1,6 @@
+Debug/
+Release/
+*.exp
+*.lib
+*.iobj
+*.ipdb
