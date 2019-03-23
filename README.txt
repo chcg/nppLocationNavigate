@@ -1,3 +1,7 @@
+!!! THIS PLUGIN DOES NOT WORK !!!
+
+I"m trying to fix the orginal broken plugin, but having little luck.
+
 NAME
 
 Notepad++ Location Navigation
