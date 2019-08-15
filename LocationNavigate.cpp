@@ -1051,6 +1051,7 @@ extern "C" __declspec( dllexport ) void beNotified( SCNotification
         }
         break;
 
+// TODO:2019-08-14:MVINCENT:access violation when SAVE document
         // mark setting remove to SCN_SAVEPOINTREACHED
         case NPPN_FILESAVED:
         {
