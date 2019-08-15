@@ -543,9 +543,9 @@ void DoSavedColor()
     while ( ( MarkLine = ::SendMessage( curScintilla, SCI_MARKERNEXT,
                                         MarkLine + 1, markerMask1 ) ) != -1 )
     {
-        //TCHAR tmp[200]={0};
-        //wsprintf(tmp,TEXT("%d"),MarkLine);
-        //MessageBox(NULL,tmp,NULL,MB_OK);
+        // TCHAR tmp[200]={0};
+        // wsprintf(tmp,TEXT("%d"),MarkLine);
+        // MessageBox(NULL,tmp,NULL,MB_OK);
         ::SendMessage( curScintilla, SCI_MARKERADD, MarkLine, _SAVE_INDEX );
     }
 
@@ -1236,7 +1236,8 @@ extern "C" __declspec( dllexport ) void beNotified( SCNotification
                 break;
             }
 
-            long pos, len;
+            long pos = 0;
+            long len = 0;
             bool flag = false;
 
             // SC_MOD_BEFOREINSERT SC_MOD_INSERTTEXT SC_MOD_BEFOREDELETE SC_MOD_DELETETEXT

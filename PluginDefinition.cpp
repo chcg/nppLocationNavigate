@@ -205,41 +205,42 @@ void commandMenuInit()
     NextChgKey->_isCtrl = true;
     NextChgKey->_isShift = false;
     NextChgKey->_key = 0x59;  //VK_Y
+    /*
     ShortcutKey *optionsKey = new ShortcutKey;
     optionsKey->_isAlt = false;
     optionsKey->_isCtrl = true;
     optionsKey->_isShift = true;
     optionsKey->_key = VK_OEM_PLUS;
-    /*
-        ShortcutKey *AutoKey = new ShortcutKey;
-        AutoKey->_isAlt = true;
-        AutoKey->_isCtrl = true;
-        AutoKey->_isShift = false;
-        AutoKey->_key = VK_F9;
 
-        ShortcutKey *ManualKey = new ShortcutKey;
-        ManualKey->_isAlt = false;
-        ManualKey->_isCtrl = false;
-        ManualKey->_isShift = false;
-        ManualKey->_key = VK_F9;
+    ShortcutKey *AutoKey = new ShortcutKey;
+    AutoKey->_isAlt = true;
+    AutoKey->_isCtrl = true;
+    AutoKey->_isShift = false;
+    AutoKey->_key = VK_F9;
 
-        ShortcutKey *ClearRecordsKey = new ShortcutKey;
-        ClearRecordsKey->_isAlt = true;
-        ClearRecordsKey->_isCtrl = true;
-        ClearRecordsKey->_isShift = true;
-        ClearRecordsKey->_key = VK_F9;
+    ShortcutKey *ManualKey = new ShortcutKey;
+    ManualKey->_isAlt = false;
+    ManualKey->_isCtrl = false;
+    ManualKey->_isShift = false;
+    ManualKey->_key = VK_F9;
 
-        ShortcutKey *incurrKey = new ShortcutKey;
-        incurrKey->_isAlt = true;
-        incurrKey->_isCtrl = false;
-        incurrKey->_isShift = false;
-        incurrKey->_key = VK_OEM_MINUS;
+    ShortcutKey *ClearRecordsKey = new ShortcutKey;
+    ClearRecordsKey->_isAlt = true;
+    ClearRecordsKey->_isCtrl = true;
+    ClearRecordsKey->_isShift = true;
+    ClearRecordsKey->_key = VK_F9;
 
-        ShortcutKey *markKey = new ShortcutKey;
-        markKey->_isAlt = true;
-        markKey->_isCtrl = true;
-        markKey->_isShift = false;
-        markKey->_key = 0x4D; // VK_Y
+    ShortcutKey *incurrKey = new ShortcutKey;
+    incurrKey->_isAlt = true;
+    incurrKey->_isCtrl = false;
+    incurrKey->_isShift = false;
+    incurrKey->_key = VK_OEM_MINUS;
+
+    ShortcutKey *markKey = new ShortcutKey;
+    markKey->_isAlt = true;
+    markKey->_isCtrl = true;
+    markKey->_isShift = false;
+    markKey->_key = 0x4D; // VK_Y
     */
     setCommand( menuPrevious, TEXT( "Previous Location" ), PreviousLocation,
                 PreviousKey, false );
@@ -250,7 +251,7 @@ void commandMenuInit()
     setCommand( menuChgNext, TEXT( "Next Changed" ), NextChangedLocation,
                 NextChgKey, false );
     setCommand( menuOption, TEXT( "Show List and Option" ),
-                LocationNavigateHistoryDlg, optionsKey, false );
+                LocationNavigateHistoryDlg, NULL, false );
     setCommand( menuSeparator0, TEXT( "-SEPARATOR-" ), NULL, NULL, false );
     setCommand( menuAutoRecord, TEXT( "Auto Record" ), AutoRecord, NULL,
                 false );
@@ -279,10 +280,10 @@ void commandMenuCleanUp()
     delete funcItem[menuNext]._pShKey;
     delete funcItem[menuChgPrevious]._pShKey;
     delete funcItem[menuChgNext]._pShKey;
-    delete funcItem[menuOption]._pShKey;
     /*
-        delete funcItem[menuInCurr]._pShKey;
-        delete funcItem[menuNeedMark]._pShKey;
+    delete funcItem[menuOption]._pShKey;
+    delete funcItem[menuInCurr]._pShKey;
+    delete funcItem[menuNeedMark]._pShKey;
     */
 }
 
