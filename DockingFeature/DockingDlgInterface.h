@@ -23,13 +23,14 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "StaticDialog.h"
 #include "dockingResource.h"
 #include "Docking.h"
+#include "../Scintilla.h"
 #include <shlwapi.h>
 //////////////////////////////////////////////////////////////////////////
 struct LocationInfo
 {
     //long line;
     //long col;
-    long position;// ??????
+    Sci_Position position;// ??????
     long bufferID;// ????
     TCHAR FilePath[MAX_PATH];
     bool changed; // ?????

@@ -25,7 +25,8 @@
 
 ////////////////SELF DATA BEGIN///////////
 TCHAR currFile[MAX_PATH] = {0};
-static int currBufferID = -1, PrePositionNumber = -1;
+static int currBufferID = -1;
+Sci_Position PrePositionNumber = -1;
 static bool ready = false;
 static bool haveDeleted = false;
 static bool PageActive = false;
@@ -89,8 +90,8 @@ enum ActionType
 struct ActionData
 {
     ActionType type;
-    int position;
-    int length;
+    Sci_Position position;
+    Sci_Position length;
     bool changed;
 };
 
@@ -100,7 +101,7 @@ void DoFilesCheck()
 {
     // ????????????????,????????,????????
     TCHAR  **buffer;
-    long filecount = ::SendMessage( nppData._nppHandle, NPPM_GETNBOPENFILES, 0,
+    long filecount = ( long )::SendMessage( nppData._nppHandle, NPPM_GETNBOPENFILES, 0,
                                     ( LPARAM )ALL_OPEN_FILES );
     //TCHAR TMP[200];
     //wsprintf(TMP,TEXT("%d,%d,%d"),filecount);
@@ -164,7 +165,7 @@ void DoFilesCheck()
     //_LNhistory.refreshDlg();
 }
 
-void DoModify( int len, int pos )
+void DoModify( Sci_Position len, Sci_Position pos )
 {
     // SEARCH in files WILL CHANGE IT
     //TCHAR buffer[10000];
@@ -183,7 +184,7 @@ void DoModify( int len, int pos )
             }
             else
             {
-                long lastpos = pos - len;
+                Sci_Position lastpos = pos - len;
 
                 if ( LocationList[i].position > pos && LocationList[i].position < lastpos )
                 {
@@ -289,7 +290,7 @@ void AddList( bool flag )
     if ( !bAutoRecord && !flag )
         return;
 
-    long position = 0; //,col=0;
+    Sci_Position position = 0; //,col=0;
     //line = ::SendMessage(handle, NPPM_GETCURRENTLINE, 0, 0);
     // Get the current scintilla
     //int which = -1;
@@ -314,7 +315,7 @@ void AddList( bool flag )
     }
 
     long len = LocationList.size();
-    long prepos = 0;
+    Sci_Position prepos = 0;
 
     if ( len == 0 || LocationPos == -1 || LocationPos > len - 1 )
         prepos = PrePositionNumber;
@@ -413,7 +414,7 @@ void InitBookmark()
         {
         }
 
-        int OriMask = ::SendMessage( tmpScintilla, SCI_GETMARGINMASKN, 4, 0 );
+        int OriMask = ( int )::SendMessage( tmpScintilla, SCI_GETMARGINMASKN, 4, 0 );
         int markerMask1 = ( 1 << _MARK_INDEX );
         int markerMask2 = ( 1 << _SAVE_INDEX );
         int tmpMask = 0;
@@ -523,9 +524,9 @@ void DoSavedColor()
         if ( MarkHistory[i].BufferID == currTmpBufferID )
         {
             // ??Handle
-            int MarkLine = ::SendMessage( curScintilla, SCI_MARKERLINEFROMHANDLE,
+            int MarkLine = ( int )::SendMessage( curScintilla, SCI_MARKERLINEFROMHANDLE,
                                           MarkHistory[i].markHandle, 0 );
-            MarkHistory[i].markHandle = ::SendMessage( curScintilla, SCI_MARKERADD,
+            MarkHistory[i].markHandle = ( int )::SendMessage( curScintilla, SCI_MARKERADD,
                                         MarkLine, _SAVE_INDEX );
             // ??Marker
             ::SendMessage( curScintilla, SCI_MARKERDELETE, MarkLine, _MARK_INDEX );
@@ -540,7 +541,7 @@ void DoSavedColor()
     int markerMask1 = ( 1 << _MARK_INDEX );
 
     // ??marker???????,????
-    while ( ( MarkLine = ::SendMessage( curScintilla, SCI_MARKERNEXT,
+    while ( ( MarkLine = ( int )::SendMessage( curScintilla, SCI_MARKERNEXT,
                                         MarkLine + 1, markerMask1 ) ) != -1 )
     {
         // TCHAR tmp[200]={0};
@@ -580,14 +581,14 @@ int AddMarkFromLine( int line )
         else if ( state != 0 )
             return markHandle;
 
-        markHandle = ::SendMessage( curScintilla, SCI_MARKERADD, line,
+        markHandle = ( int )::SendMessage( curScintilla, SCI_MARKERADD, line,
                                     _MARK_INDEX );
     }
 
     return markHandle;
 }
 
-void SetBookmark( int lineNo, int pos, int linesAdded, int len )
+void SetBookmark( int lineNo, Sci_Position pos, Sci_Position linesAdded, Sci_Position len )
 {
 
     // ??undo??,?Line?Position????,UNDO????,??curScintilla,Position?Line?????
@@ -656,12 +657,12 @@ bool RemoveMarkFromLine( int line )
     return true;
 }
 
-void DelBookmark( int lineNo, int pos, int lineAdd )
+void DelBookmark( int lineNo, Sci_Position pos, Sci_Position lineAdd )
 {
     if ( ByBookMark != MarkBookmark )
     {
         // ????????
-        int canUndoFlag = ::SendMessage( curScintilla, SCI_CANUNDO, 0, 0 );
+        int canUndoFlag = ( int )::SendMessage( curScintilla, SCI_CANUNDO, 0, 0 );
 
         if ( 0 == canUndoFlag )
         {
@@ -727,7 +728,7 @@ void DelBookmark( int lineNo, int pos, int lineAdd )
             break;
 
         MarkData pretmp = MarkHistory[tmpIndex];
-        int MarkLine = ::SendMessage( curScintilla, SCI_MARKERLINEFROMHANDLE,
+        int MarkLine = ( int )::SendMessage( curScintilla, SCI_MARKERLINEFROMHANDLE,
                                       pretmp.markHandle, 0 );
 
         if ( MarkLine != pretmp.line )
@@ -819,8 +820,8 @@ typedef const TBBUTTON *LPCTBBUTTON;
 #define TB_BUTTONCOUNT    (WM_USER + 24)
 #define TB_COMMANDTOINDEX (WM_USER + 25)
 
-static long preModifyPos = -1;
-static long preModifyLineAdd = -1;
+static Sci_Position preModifyPos = -1;
+static Sci_Position preModifyLineAdd = -1;
 
 extern "C" __declspec( dllexport ) void beNotified( SCNotification
         *notifyCode )
@@ -1114,7 +1115,7 @@ extern "C" __declspec( dllexport ) void beNotified( SCNotification
                             && lstrcmp( LocationList[0].FilePath, NEWFILE ) == 0 )
                     {
                         TCHAR  **buffer;
-                        long filecount2 = ::SendMessage( nppData._nppHandle, NPPM_GETNBOPENFILES, 0,
+                        long filecount2 = ( long )::SendMessage( nppData._nppHandle, NPPM_GETNBOPENFILES, 0,
                                                          ( LPARAM )PRIMARY_VIEW );
                         buffer = new TCHAR*[filecount2];
 
@@ -1236,8 +1237,8 @@ extern "C" __declspec( dllexport ) void beNotified( SCNotification
                 break;
             }
 
-            long pos = 0;
-            long len = 0;
+            Sci_Position pos = 0;
+            Sci_Position len = 0;
             bool flag = false;
 
             // SC_MOD_BEFOREINSERT SC_MOD_INSERTTEXT SC_MOD_BEFOREDELETE SC_MOD_DELETETEXT
@@ -1322,14 +1323,14 @@ extern "C" __declspec( dllexport ) void beNotified( SCNotification
                             if ( notifyCode->linesAdded == 0 && preModifyPos != pos
                                     && preModifyPos != -1 )
                             {
-                                line = ::SendMessage( curScintilla, SCI_LINEFROMPOSITION, preModifyPos, 0 );
+                                line = ( int )::SendMessage( curScintilla, SCI_LINEFROMPOSITION, preModifyPos, 0 );
                                 DelBookmark( line, preModifyPos, preModifyLineAdd );
                             }
 
                             // ?????????0,??????,???????
                             if ( notifyCode->linesAdded != 0 || ( ModifyType & SC_LASTSTEPINUNDOREDO ) )
                             {
-                                line = ::SendMessage( curScintilla, SCI_LINEFROMPOSITION, pos, 0 );
+                                line = ( int )::SendMessage( curScintilla, SCI_LINEFROMPOSITION, pos, 0 );
                                 DelBookmark( line, pos, notifyCode->linesAdded );
                                 preModifyPos = -1;
                             }
@@ -1342,7 +1343,7 @@ extern "C" __declspec( dllexport ) void beNotified( SCNotification
                         else
                         {
                             // SC_PERFORMED_REDO
-                            int line = ::SendMessage( curScintilla, SCI_LINEFROMPOSITION,
+                            int line = ( int )::SendMessage( curScintilla, SCI_LINEFROMPOSITION,
                                                       notifyCode->position, 0 );
                             SetBookmark( line, notifyCode->position, notifyCode->linesAdded, len );
                         }

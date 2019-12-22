@@ -72,7 +72,7 @@ void SetPosByIndex()
         return;
 
     PositionSetting = true;
-    long pos = LocationList[LocationPos].position;
+    Sci_Position pos = LocationList[LocationPos].position;
     long res = ::SendMessage( nppData._nppHandle, NPPM_DOOPEN, 0,
                               ( LPARAM )LocationList[LocationPos].FilePath );
 

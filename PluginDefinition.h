@@ -57,7 +57,7 @@ enum menuList
 };
 struct MarkData
 {
-	int position;
+	Sci_Position position;
 	int line;
 	int lineAdd;
 	int BufferID ;
