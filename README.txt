@@ -1,5 +1,7 @@
 !!! THIS PLUGIN DOES NOT WORK !!!
 
+See nppChangedLines (https://github.com/vinsworldcom/nppChangedLines) instead.
+
 I"m trying to fix the orginal broken plugin, but having little luck.
 
 NAME
